@@ -80,6 +80,13 @@ public interface ILineDataSet extends ILineRadarDataSet<Entry> {
     boolean isDrawCircleHoleEnabled();
 
     /**
+     * Returns true if drawing the cross is enabled, false if not.
+     *
+     * @return
+     */
+    boolean isDrawCrossEnabled();
+
+    /**
      * Returns the DashPathEffect that is used for drawing the lines.
      *
      * @return
