@@ -331,7 +331,8 @@ public class LegendRenderer extends Renderer {
                         break;
 
                     case BOTTOM:
-                        posY = mViewPortHandler.getChartHeight() - yoffset - mLegend.mNeededHeight;
+                        posY = mViewPortHandler.getChartHeight() - yoffset - mLegend.mNeededHeight
+                            + mLegend.getExtraPadding();
                         break;
 
                     case CENTER:
