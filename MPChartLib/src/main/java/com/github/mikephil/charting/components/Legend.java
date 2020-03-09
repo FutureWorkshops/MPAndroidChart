@@ -126,6 +126,11 @@ public class Legend extends ComponentBase {
     private float mYEntrySpace = 0f;
 
     /**
+     * Extra padding on the legend at bottom horizontal mode, default is 0
+     */
+    private float mExtraPadding = 0f;
+
+    /**
      * the space between the legend entries on a vertical axis, default 2f
      * private float mYEntrySpace = 2f; /** the space between the form and the
      * actual label/text
@@ -558,6 +563,25 @@ public class Legend extends ComponentBase {
         mStackSpace = space;
     }
 
+
+    /**
+     * sets the extra padding of the legend at bottom horizontal mode
+     *
+     * @param value
+     */
+    public void setExtraPadding(float value) {
+        mExtraPadding = value;
+    }
+
+    /**
+     * returns the extra padding of the legend at bottom horizontal mode
+     *
+     * @return
+     */
+    public float getExtraPadding() {
+        return mExtraPadding;
+    }
+
     /**
      * the total width of the legend (needed width space)
      */
@@ -809,7 +833,8 @@ public class Legend extends ComponentBase {
 
                 mNeededWidth = maxLineWidth;
                 mNeededHeight = labelLineHeight
-                        * (float) (mCalculatedLineSizes.size())
+                    + mExtraPadding
+                    * (float) (mCalculatedLineSizes.size())
                         + labelLineSpacing *
                         (float) (mCalculatedLineSizes.size() == 0
                                 ? 0
