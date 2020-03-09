@@ -64,6 +64,11 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
 
     private boolean mDrawCircleHole = true;
 
+    /**
+     * if true, drawing crosses is disabled by default
+     */
+    private boolean mDrawCross = false;
+
 
     public LineDataSet(List<Entry> yVals, String label) {
         super(yVals, label);
@@ -387,6 +392,20 @@ public class LineDataSet extends LineRadarDataSet<Entry> implements ILineDataSet
     @Override
     public boolean isDrawCircleHoleEnabled() {
         return mDrawCircleHole;
+    }
+
+    /**
+     * Set this to true to allow drawing a cross in each data position.
+     *
+     * @param enabled
+     */
+    public void setDrawCross(boolean enabled) {
+        mDrawCross = enabled;
+    }
+
+    @Override
+    public boolean isDrawCrossEnabled() {
+        return mDrawCross;
     }
 
     /**

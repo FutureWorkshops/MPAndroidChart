@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 
+import androidx.annotation.ColorInt;
+
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -652,11 +654,12 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             float circleRadius = dataSet.getCircleRadius();
             float circleHoleRadius = dataSet.getCircleHoleRadius();
+            boolean drawCross = dataSet.isDrawCrossEnabled();
             boolean drawCircleHole = dataSet.isDrawCircleHoleEnabled() &&
-                    circleHoleRadius < circleRadius &&
-                    circleHoleRadius > 0.f;
+                circleHoleRadius < circleRadius &&
+                circleHoleRadius > 0.f && !drawCross;
             boolean drawTransparentCircleHole = drawCircleHole &&
-                    dataSet.getCircleHoleColor() == ColorTemplate.COLOR_NONE;
+                dataSet.getCircleHoleColor() == ColorTemplate.COLOR_NONE && !drawCross;
 
             DataSetImageCache imageCache;
 
@@ -671,7 +674,7 @@ public class LineChartRenderer extends LineRadarRenderer {
 
             // only fill the cache with new bitmaps if a change is required
             if (changeRequired) {
-                imageCache.fill(dataSet, drawCircleHole, drawTransparentCircleHole);
+                imageCache.fill(dataSet, drawCircleHole, drawTransparentCircleHole, drawCross);
             }
 
             int boundsRangeCount = mXBounds.range + mXBounds.min;
@@ -803,8 +806,9 @@ public class LineChartRenderer extends LineRadarRenderer {
          * @param set
          * @param drawCircleHole
          * @param drawTransparentCircleHole
+         * @param drawCross
          */
-        protected void fill(ILineDataSet set, boolean drawCircleHole, boolean drawTransparentCircleHole) {
+        protected void fill(ILineDataSet set, boolean drawCircleHole, boolean drawTransparentCircleHole, boolean drawCross) {
 
             int colorCount = set.getCircleColorCount();
             float circleRadius = set.getCircleRadius();
@@ -819,7 +823,11 @@ public class LineChartRenderer extends LineRadarRenderer {
                 circleBitmaps[i] = circleBitmap;
                 mRenderPaint.setColor(set.getCircleColor(i));
 
-                if (drawTransparentCircleHole) {
+                if (drawCross) {
+
+                    drawCrossInCanvas(canvas, circleRadius * 2.1f, set.getCircleColor(i));
+
+                } else if (drawTransparentCircleHole) {
                     // Begin path for circle with hole
                     mCirclePathBuffer.reset();
 
@@ -855,6 +863,21 @@ public class LineChartRenderer extends LineRadarRenderer {
                     }
                 }
             }
+        }
+
+        /**
+         * Draw a cross in the canvas with the size and color provided
+         *
+         * @param canvas
+         * @param size
+         * @param color
+         */
+        private void drawCrossInCanvas(Canvas canvas, float size, @ColorInt int color) {
+            Paint paint = new Paint();
+            paint.setColor(color);
+            paint.setStrokeWidth(5f);
+            canvas.drawLine(0, 0, size, size, paint);
+            canvas.drawLine(size, 0, 0, size, paint);
         }
 
         /**
